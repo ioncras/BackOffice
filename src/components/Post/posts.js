@@ -60,8 +60,9 @@ export const PostCreate = props => (
             <ReferenceInput source="userId" reference="users">
                 <SelectInput optionText="name" />
             </ReferenceInput>
-            <TextInput source="title" />
+            <TextInput label="Cliente" source="title" type="text" />
             <LongTextInput source="body" />
+       
         </SimpleForm>
     </Create>
 );
