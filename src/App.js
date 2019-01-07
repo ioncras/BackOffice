@@ -18,7 +18,7 @@ const App = () => (
   <Admin dashboard={Dashboard} authProvider={authProvider} dataProvider={dataProvider}>
       <Resource name="posts" list={PostList} edit={PostEdit} create={PostCreate} icon={PostIcon}/>
       <Resource name="users" list={UserList}  icon={UserIcon}/>
-      <Resource name="guias" list={GuiasList}  icon={GuidesIcon}/>
+      <Resource name="users" list={GuiasList}  icon={GuidesIcon}/>
   </Admin>
 );
 
