@@ -1,9 +1,8 @@
 import React from 'react';
-import { List, Datagrid, TextField, EmailField, Create, SimpleForm, ReferenceInput, SelectInput, TextInput, LongTextInput, DateField, DateInput } from 'react-admin';
-import MyUrlField from './../../MyUrlField';
+import { List, Datagrid, TextField, Create, SimpleForm, ReferenceInput, SelectInput, TextInput, DateField, DateInput } from 'react-admin';
 
 const GuiasTitle = ({ record }) => {
-    return <span>Guas {record ? `"${record.title}"` : ''}</span>;
+    return <span>Guias {record ? `"${record.title}"` : ''}</span>;
 };
 
 export const GuiasList = props => (

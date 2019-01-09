@@ -22,10 +22,8 @@ const dataProvider = fakeDataProvider(data);
 
 const App = () => (
   <Admin dashboard={Dashboard} authProvider={authProvider} dataProvider={dataProvider}>
-    {/*   
-    <Resource name="posts" list={PostList} edit={PostEdit} create={PostCreate} icon={PostIcon}/>
-    <Resource name="users" list={UserList} icon={UserIcon} />
-    */}
+      <Resource name="users" list={UserList} icon={UserIcon} />
+      <Resource name="posts" list={PostList} edit={PostEdit} create={PostCreate} icon={PostIcon}/>  
       <Resource name="proveedores" list={ProveedoresList}/>
       <Resource name="guias" list={GuiasList} icon={UserIcon} create={GuiasCreate} />
   </Admin>
