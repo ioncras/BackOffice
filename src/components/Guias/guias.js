@@ -20,7 +20,9 @@ import {
 import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
 import Checkbox from '@material-ui/core/Checkbox';
-import ProvReferenceInput from './../Proveedores/provReferenceInput'
+import ProvQuickCreateButton from '../Proveedores/provQuickCreateButton';
+
+//import ProvReferenceInput from './../Proveedores/provReferenceInput'
 
 const GuiasTitle = ({ record }) => {
     return <span>Guias {record ? `"${record.title}"` : ''}</span>;
@@ -34,12 +36,16 @@ const ItemsProductos = ({record,resource}) => {
     }
 
     return (
-        <Fragment>           
-
-            {items.map((item) =>  <SimpleList key={item.id}
-                primaryText={record => record.id}
-                secondaryText={record => record.nombre}
-            />)}
+        <Fragment> 
+             <Fragment> 
+                {
+                    items.map((item) => 
+                        <div key={item.id}>
+                            {`${item.id} - ${item.nombre}`}
+                        </div>
+                    )
+                }
+            </Fragment>
         </Fragment>
     );
 };
@@ -92,6 +98,10 @@ export class GuiasCreate extends Component {
                     <ReferenceInput label="Proveedor" source="proveedor_id" reference="proveedores">
                         <SelectInput optionText="nombre" />
                     </ReferenceInput>
+                    <ProvQuickCreateButton
+                        label="Proveedor"
+                        source="proveedor_id"
+                        reference="proveedores" />
                     <ArrayInput source="items">
                         <SimpleFormIterator>
                             <ReferenceInput label="Producto" reference="productos" >
@@ -104,8 +114,7 @@ export class GuiasCreate extends Component {
                         <TextField source="numero" />
                     </MyDatagrid>
                             
-                </SimpleForm>
-                <ProvReferenceInput></ProvReferenceInput>
+                </SimpleForm>                
             </Create>
         );
     }

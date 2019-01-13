@@ -11,6 +11,7 @@ import {
     SimpleForm,
     TextInput,
     LongTextInput,
+    crudGetMatching,
     CREATE,
     REDUX_FORM_NAME
 } from 'react-admin';
@@ -20,13 +21,7 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogActions from '@material-ui/core/DialogActions';
-
-
-import fakeDataProvider from 'ra-data-fakerest';
-import data from './../../data.json';
-
-const dataProvider = fakeDataProvider(data);
-
+import { dataProvider } from '../../App';
 
 class ProvQuickCreateButton extends Component {
     state = {
@@ -51,7 +46,7 @@ class ProvQuickCreateButton extends Component {
     };
 
     handleSubmit = values => {
-        const { change, fetchStart, fetchEnd, showNotification } = this.props;
+        const { change, crudGetMatching, fetchStart, fetchEnd, showNotification } = this.props;
 
         // Dispatch an action letting react-admin know a API call is ongoing
         fetchStart();
@@ -60,8 +55,18 @@ class ProvQuickCreateButton extends Component {
         // dataProvider directly
         dataProvider(CREATE, 'proveedores', { data: values })
             .then(({ data }) => {
+                // Refresh the choices of the ReferenceInput to ensure our newly created post
+                // always appear, even after selecting another post
+                crudGetMatching(
+                    'proveedores',
+                    'guias@proveedor_id',
+                    { page: 1, perPage: 25 },
+                    { field: 'id_prov', order: 'DESC' },
+                    {}
+                );
+
                 // Update the main react-admin form (in this case, the comments creation form)
-                change(REDUX_FORM_NAME, 'id_prov', data.id);
+                change(REDUX_FORM_NAME, 'proveedor_id', data.id);
                 this.setState({ showDialog: false });
             })
             .catch(error => {
@@ -126,7 +131,8 @@ const mapDispatchToProps = {
     fetchEnd,
     fetchStart,
     showNotification,
-    submit
+    submit,
+    crudGetMatching
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(

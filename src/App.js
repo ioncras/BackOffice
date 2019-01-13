@@ -19,7 +19,7 @@ import GuidesIcon from '@material-ui/icons/Mood';
 import fakeDataProvider from 'ra-data-fakerest';
 import data from './data.json';
 
-const dataProvider = fakeDataProvider(data);
+export const dataProvider = fakeDataProvider(data);
 
 //const dataProvider = jsonServerProvider('http://jsonplaceholder.typicode.com');
 

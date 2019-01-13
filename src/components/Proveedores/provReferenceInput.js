@@ -5,7 +5,7 @@ import ProvQuickCreateButton from './provQuickCreateButton';
 const ProvReferenceInput = () => (
     <Fragment>
         <ReferenceInput {...this.props}>
-            <SelectInput optionText="title" />
+            <SelectInput optionText="nombre" />
         </ReferenceInput>
         <ProvQuickCreateButton />
     </Fragment>
