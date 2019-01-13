@@ -13,7 +13,6 @@
         {"id": 2, "nombre": "Producto 2", "precio": 10.0}
       ]},
       { "id": 2, "numero": "698745", "fecha": "2018-07-05", "proveedor_id": 2 }
-<<<<<<< HEAD
   ],
   "items": [
   ],
@@ -286,7 +285,5 @@
         "bs": "target end-to-end models"
       }
     }
-=======
->>>>>>> 67690f55a5fcb3c371a684acc1d0a5bbf4004473
   ]
 }
