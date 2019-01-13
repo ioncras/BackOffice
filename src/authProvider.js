@@ -15,8 +15,8 @@ export default (type, params) => {
                 "id": 1,
                 "token": {
                     "database": "test",
-                    "username": "test@test.com",
-                    "password": "test"
+                    "username": username,
+                    "password": password
                 },
                 "model": "res.users",
                 "params": [
@@ -26,7 +26,7 @@ export default (type, params) => {
                     []
                 ],
                 "method": "authenticate"
-            }).then(response => response.data ? resolve(): reject());
+            }).then(response => response.data == true ? resolve(): reject());
         })
        
         return login;
