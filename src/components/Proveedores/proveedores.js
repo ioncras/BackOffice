@@ -14,8 +14,8 @@ const ProveedorFilter = (props) => (
 export const ProveedorList = props => (
     <List {...props} filters={<ProveedorFilter />} >
         <Datagrid rowClick="edit">
-            <TextField source="id_prov" />   
-            <TextField source="nombre" />
+            <TextField source="id" />   
+            <TextField source="name" />
         </Datagrid>
     </List>
 );

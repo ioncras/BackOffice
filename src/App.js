@@ -18,8 +18,8 @@ import GuidesIcon from '@material-ui/icons/Mood';
 
 import fakeDataProvider from 'ra-data-fakerest';
 import data from './data.json';
-
-export const dataProvider = fakeDataProvider(data);
+import dataProvider from './dataProvider'
+//const dataProvider = fakeDataProvider(data);
 
 //const dataProvider = jsonServerProvider('http://jsonplaceholder.typicode.com');
 
@@ -27,11 +27,11 @@ export const dataProvider = fakeDataProvider(data);
 const App = () => (
   <Admin dashboard={Dashboard} authProvider={authProvider} dataProvider={dataProvider}>
 
-      <Resource name="users" list={UserList} icon={UserIcon} />
+      <Resource name="res.users" list={UserList} icon={UserIcon} />
       <Resource name="posts" list={PostList} edit={PostEdit} create={PostCreate} icon={PostIcon}/>  
-      <Resource name="productos" list={ProductosList}/>
-      <Resource name="proveedores" list={ProveedoresList}/>
-      <Resource name="guias" list={GuiasList} icon={UserIcon} create={GuiasCreate} />
+      <Resource name="product.product" list={ProductosList}/>
+      <Resource name="res.partner" list={ProveedoresList}/>
+      <Resource name="ioncras.guia" list={GuiasList} icon={UserIcon} create={GuiasCreate} />
   </Admin>
 );
 

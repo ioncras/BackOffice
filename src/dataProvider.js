@@ -10,7 +10,12 @@ import {
 } from 'react-admin';
 import { stringify } from 'query-string';
 
-const API_URL = 'my.api.url';
+import createMessage from './util/message'
+
+const API_URL = 'http://localhost:8080';
+const resourceMap = {
+    'usuarios': 'res.users'
+}
 
 // /**
 //  * @param {String} type One of the constants appearing at the top if this file, e.g. 'UPDATE'
@@ -29,10 +34,17 @@ const convertDataProviderRequestToHTTP = (type, resource, params) => {
             range: JSON.stringify([(page - 1) * perPage, page * perPage - 1]),
             filter: JSON.stringify(params.filter),
         };
-        return { url: `${API_URL}/${resource}?${stringify(query)}` };
+
+        return {
+            url: `${API_URL}`,
+            options: { method: 'POST', body: JSON.stringify(createMessage(resource,'search_read',[])) },
+        };
     }
     case GET_ONE:
-        return { url: `${API_URL}/${resource}/${params.id}` };
+        return {
+            url: `${API_URL}`,
+            options: { method: 'POST', body: JSON.stringify(createMessage(resource, 'search_read', [['id','=',params.id]])) },
+        };
     case GET_MANY: {
         const query = {
             filter: JSON.stringify({ id: params.ids }),
@@ -78,11 +90,12 @@ const convertDataProviderRequestToHTTP = (type, resource, params) => {
 //  */
 const convertHTTPResponseToDataProvider = (response, type, resource, params) => {
     const { headers, json } = response;
+    console.log(response)
     switch (type) {
     case GET_LIST:
         return {
             data: json.map(x => x),
-            total: parseInt(headers.get('content-range').split('/').pop(), 10),
+            total: json.length,
         };
     case CREATE:
         return { data: { ...params.data, id: json.id } };

@@ -56,8 +56,8 @@ export const GuiasList = props => (
     <List {...props} >
         <Datagrid rowClick="edit" expand={<ItemsProductos />}>
             <TextField source="id" />   
-            <TextField source="numero" label="Numero Comprobante" />
-            <DateField source="fecha" />
+            <TextField source="nro_guia" label="Numero Guia" />
+            <DateField source="date" />
         </Datagrid>
     </List>
     

@@ -26,8 +26,7 @@ export const ProductList = props => (
     <List {...props} filters={<ProductFilter />}>
         <Datagrid rowClick="edit">
             <TextField source="id" />   
-            <TextField source="nombre" />
-            <EditButton label="Editar" />
+            <TextField source="name" />
         </Datagrid>
     </List>
 );
