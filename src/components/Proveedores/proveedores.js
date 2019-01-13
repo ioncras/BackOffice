@@ -1,39 +1,40 @@
 import React from 'react';
 import { List, Filter,Datagrid, TextField,Create,SimpleForm,TextInput,Edit,DisabledInput } from 'react-admin';
+import connect from './provReferenceInput';
 
-
-const ProviderTitle = ({ record }) => {
+const ProveedorTitle = ({ record }) => {
     return <span>Proveedor {record ? `"${record.title}"` : ''}</span>;
 };
 
-const ProviderFilter = (props) => (
+const ProveedorFilter = (props) => (
     <Filter {...props}>
         <TextInput label="Search" source="q" alwaysOn />
     </Filter>
 );
 
-export const ProviderList = props => (
-    <List {...props} filters={<ProviderFilter />} >
+export const ProveedorList = props => (
+    <List {...props} filters={<ProveedorFilter />} >
         <Datagrid rowClick="edit">
-            <TextField source="id" />   
+            <TextField source="id_prov" />   
             <TextField source="nombre" />
         </Datagrid>
     </List>
 );
 
 
-export const ProviderCreate = props => (
+export const ProveedorCreate = props => (
     <Create {...props}>
         <SimpleForm>
             <TextInput label="Razon Social" source="nombre" type="text" />
+            <connect></connect>
         </SimpleForm>
     </Create>
 );
 
-export const ProviderEdit = props => (
-    <Edit title={<ProviderTitle />} {...props}>
+export const ProveedorEdit = props => (
+    <Edit title={<ProveedorTitle />} {...props}>
         <SimpleForm>
-            <DisabledInput source="id" />
+            <DisabledInput source="id_prov" />
             <TextInput source="nombre" />
         </SimpleForm>
     </Edit>

@@ -4,8 +4,8 @@
     { "id": 20, "nombre": "Producto 2" }
   ],
   "proveedores": [
-    { "id": 1, "nombre": "Juan Manuel" },
-    { "id": 2, "nombre": "Seba" }
+    { "id_prov": 1, "nombre": "Juan Manuel" },
+    { "id_prov": 2, "nombre": "Seba" }
   ],
   "guias": [
       { "id": 1, "numero": "123456", "fecha": "2018-06-01", "proveedor_id": 1 , "items": [

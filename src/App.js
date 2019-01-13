@@ -5,7 +5,7 @@ import { Admin, Resource } from 'react-admin';
 import { PostList, PostEdit, PostCreate } from './components/Post/posts';
 import { UserList } from './components/Users/users';
 import { ProductList, ProductCreate,ProductEdit} from './components/Productos/productos';
-import { ProviderList, ProviderCreate,ProviderEdit} from './components/Proveedores/proveedores';
+import { ProveedorList, ProveedorCreate,ProveedorEdit} from './components/Proveedores/proveedores';
 import {
   GuiasList,
   GuiasCreate
@@ -29,7 +29,7 @@ const App = () => (
       <Resource name="users" list={UserList} icon={UserIcon} />
       <Resource name="posts" list={PostList} edit={PostEdit} create={PostCreate} icon={PostIcon}/>  
       <Resource name="productos" list={ProductList} edit={ProductEdit} create={ProductCreate}  />
-      <Resource name="proveedores" list={ProviderList} edit={ProviderEdit} create={ProviderCreate}  />
+      <Resource name="proveedores" list={ProveedorList} edit={ProveedorEdit} create={ProveedorCreate}  />
       <Resource name="guias" list={GuiasList} icon={UserIcon} create={GuiasCreate} />
   </Admin>
 );
