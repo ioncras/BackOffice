@@ -20,7 +20,7 @@ import {
 import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
 import Checkbox from '@material-ui/core/Checkbox';
-
+import ProvReferenceInput from './../Proveedores/provReferenceInput'
 
 const GuiasTitle = ({ record }) => {
     return <span>Guias {record ? `"${record.title}"` : ''}</span>;
@@ -105,6 +105,7 @@ export class GuiasCreate extends Component {
                     </MyDatagrid>
                             
                 </SimpleForm>
+                <ProvReferenceInput></ProvReferenceInput>
             </Create>
         );
     }
