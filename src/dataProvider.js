@@ -49,7 +49,13 @@ const convertDataProviderRequestToHTTP = (type, resource, params) => {
         const query = {
             filter: JSON.stringify({ id: params.ids }),
         };
-        return { url: `${API_URL}/${resource}?${stringify(query)}` };
+        console.log(params.ids)
+        const ids = []
+        console.log(ids)
+        return {
+            url: `${API_URL}`,
+            options: { method: 'POST', body: JSON.stringify(createMessage(resource, 'read', [ids]  )) },
+        };
     }
     case GET_MANY_REFERENCE: {
         const { page, perPage } = params.pagination;
@@ -68,8 +74,8 @@ const convertDataProviderRequestToHTTP = (type, resource, params) => {
         };
     case CREATE:
         return {
-            url: `${API_URL}/${resource}`,
-            options: { method: 'POST', body: JSON.stringify(params.data) },
+            url: `${API_URL}`,
+            options: { method: 'POST', body: JSON.stringify(createMessage(resource, 'create', [params.data])) },
         };
     case DELETE:
         return {

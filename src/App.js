@@ -20,17 +20,20 @@ import fakeDataProvider from 'ra-data-fakerest';
 import data from './data.json';
 import dataProvider from './dataProvider'
 //const dataProvider = fakeDataProvider(data);
-
+import spanishMessages from './es'
+const messages = {
+  'es': spanishMessages,
+};
+const i18nProvider = locale => messages[locale];
 //const dataProvider = jsonServerProvider('http://jsonplaceholder.typicode.com');
 
 
 const App = () => (
-  <Admin dashboard={Dashboard} authProvider={authProvider} dataProvider={dataProvider}>
+  <Admin locale="es" i18nProvider={i18nProvider} dashboard={Dashboard} authProvider={authProvider} dataProvider={dataProvider}>
 
       <Resource name="res.users" list={UserList} icon={UserIcon} />
-      <Resource name="posts" list={PostList} edit={PostEdit} create={PostCreate} icon={PostIcon}/>  
-      <Resource name="product.product" list={ProductosList}/>
-      <Resource name="res.partner" list={ProveedoresList}/>
+      <Resource name="product.product" list={ProductList}/>
+      <Resource name="res.partner" list={ProveedorList}/>
       <Resource name="ioncras.guia" list={GuiasList} icon={UserIcon} create={GuiasCreate} />
   </Admin>
 );

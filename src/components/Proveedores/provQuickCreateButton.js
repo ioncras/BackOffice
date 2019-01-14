@@ -21,7 +21,7 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogActions from '@material-ui/core/DialogActions';
-import { dataProvider } from '../../App';
+import dataProvider  from '../../dataProvider';
 
 class ProvQuickCreateButton extends Component {
     state = {
@@ -53,20 +53,20 @@ class ProvQuickCreateButton extends Component {
 
         // As we want to know when the new post has been created in order to close the modal, we use the
         // dataProvider directly
-        dataProvider(CREATE, 'proveedores', { data: values })
+        dataProvider(CREATE, 'res.partner', { data: values })
             .then(({ data }) => {
                 // Refresh the choices of the ReferenceInput to ensure our newly created post
                 // always appear, even after selecting another post
-                crudGetMatching(
+               /*- crudGetMatching(
                     'proveedores',
                     'guias@proveedor_id',
                     { page: 1, perPage: 25 },
                     { field: 'id_prov', order: 'DESC' },
                     {}
-                );
+               );*/
 
                 // Update the main react-admin form (in this case, the comments creation form)
-                change(REDUX_FORM_NAME, 'proveedor_id', data.id);
+                //change(REDUX_FORM_NAME, 'proveedor_id', data.id);
                 this.setState({ showDialog: false });
             })
             .catch(error => {
@@ -98,13 +98,13 @@ class ProvQuickCreateButton extends Component {
                         <SimpleForm
                             // We override the redux-form name to avoid collision with the react-admin main form
                             form="prov-quick-create"
-                            resource="proveedores"
+                            resource="res.partner"
                             // We override the redux-form onSubmit prop to handle the submission ourselves
                             onSubmit={this.handleSubmit}
                             // We want no toolbar at all as we have our modal actions
                             toolbar={null}
                         >
-                            <TextInput source="nombre" validate={required()} />
+                            <TextInput source="name" validate={required()} />
                         </SimpleForm>
                     </DialogContent>
                     <DialogActions>

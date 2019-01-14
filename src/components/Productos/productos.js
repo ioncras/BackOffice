@@ -18,7 +18,7 @@ const ProductFilter = (props) => (
 );
 
 const ProductTitle = ({ record }) => {
-    return <span>Producto {record ? `"${record.title}"` : ''}</span>;
+    return <span>Producto {record ? `"${record.name}"` : ''}</span>;
 };
 
 
@@ -35,7 +35,7 @@ export const ProductList = props => (
 export const ProductCreate = props => (
     <Create {...props}>
         <SimpleForm>
-            <TextInput label="Producto" source="nombre" type="text" />
+            <TextInput label="Producto" source="name" type="text" />
         </SimpleForm>
     </Create>
 );
@@ -44,7 +44,7 @@ export const ProductEdit = props => (
     <Edit title={<ProductTitle />} {...props}>
         <SimpleForm>
             <DisabledInput source="id" />
-            <TextInput source="nombre" />
+            <TextInput source="name" />
         </SimpleForm>
     </Edit>
 );

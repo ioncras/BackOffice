@@ -95,18 +95,18 @@ export class GuiasCreate extends Component {
             <Create {...this.props}>
                 <SimpleForm>
                     <TextInput source="numero" label="Numero Comprobante" />
-                    <DateInput source="fecha" />
-                    <ReferenceInput label="Proveedor" source="proveedor_id" reference="proveedores">
-                        <SelectInput optionText="nombre" />
+                    <DateInput source="date" />
+                    <ReferenceInput label="Proveedor" source="stock_owner_id" reference="res.partner">
+                        <SelectInput optionText="name" />
                     </ReferenceInput>
                     <ProvQuickCreateButton
                         label="Proveedor"
-                        source="proveedor_id"
-                        reference="proveedores" />
-                    <ArrayInput source="items">
+                        source="stock_owner_id"
+                        reference="res.partner" />
+                    <ArrayInput source="guia_line_ids">
                         <SimpleFormIterator>
-                            <ReferenceInput label="Producto" reference="productos" >
-                                <AutocompleteInput optionText="nombre"/>
+                            <ReferenceInput label="Producto" source="product_id" reference="product.product" >
+                                <AutocompleteInput optionText="name"/>
                             </ReferenceInput>
                             <ProdQuickCreateButton
                                 label="Producto"
@@ -114,8 +114,12 @@ export class GuiasCreate extends Component {
                                 reference="productos" />
                             <TextInput source="precio" />
                             
+                            <TextInput source="product_qty" />
+                            <TextInput source="vacio_price" />
+
                         </SimpleFormIterator>
-                    </ArrayInput>
+                    </ArrayInput> 
+
                     <MyDatagrid>
                         <TextField source="numero" />
                     </MyDatagrid>
