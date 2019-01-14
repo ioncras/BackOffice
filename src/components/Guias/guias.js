@@ -21,6 +21,7 @@ import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
 import Checkbox from '@material-ui/core/Checkbox';
 import ProvQuickCreateButton from '../Proveedores/provQuickCreateButton';
+import ProdQuickCreateButton from '../Productos/prodQuickCreateButton';
 
 //import ProvReferenceInput from './../Proveedores/provReferenceInput'
 
@@ -107,7 +108,12 @@ export class GuiasCreate extends Component {
                             <ReferenceInput label="Producto" reference="productos" >
                                 <AutocompleteInput optionText="nombre"/>
                             </ReferenceInput>
+                            <ProdQuickCreateButton
+                                label="Producto"
+                                source="id"
+                                reference="productos" />
                             <TextInput source="precio" />
+                            
                         </SimpleFormIterator>
                     </ArrayInput>
                     <MyDatagrid>

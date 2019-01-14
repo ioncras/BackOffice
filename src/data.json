@@ -1,7 +1,7 @@
 {
   "productos": [
-    { "id": 10, "nombre": "Producto 1" },
-    { "id": 20, "nombre": "Producto 2" }
+    { "id_prod": 10, "nombre": "Producto 1" },
+    { "id_prod": 20, "nombre": "Producto 2" }
   ],
   "proveedores": [
     { "id_prov": 1, "nombre": "Juan Manuel" },
