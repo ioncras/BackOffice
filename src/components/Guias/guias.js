@@ -15,7 +15,7 @@ import {
     DateInput,
     DatagridBody,
     SimpleList,
-    FunctionField
+    FunctionField, Filter
 } from 'react-admin';
 
 import TableCell from '@material-ui/core/TableCell';
@@ -29,6 +29,16 @@ import ProdQuickCreateButton from '../Productos/prodQuickCreateButton';
 const GuiasTitle = ({ record }) => {
     return <span>Guias {record ? `"${record.title}"` : ''}</span>;
 };
+
+const GuiasFilter = (props) => (
+    <Filter {...props}>
+        <ReferenceInput label="Proveedor" source="stock_owner_id" reference="res.partner" allowEmpty>
+            <SelectInput source="display_name" />
+        </ReferenceInput>
+        <TextInput label="Id" source="id" />
+        <DateInput label="Fecha" source="date" />
+    </Filter>
+);
 
 const ItemsProductos = ({record,resource}) => {
     const  items  = record.guia_line_ids;
@@ -59,7 +69,7 @@ const ItemsProductos = ({record,resource}) => {
 
 
 export const GuiasList = props => (
-    <List {...props} >
+    <List {...props} filters={<GuiasFilter />} >
         <Datagrid rowClick="edit" expand={<ItemsProductos />}>
             <TextField source="id" />   
             <TextField source="display_name" label="Guia" />

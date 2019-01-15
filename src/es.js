@@ -8,6 +8,7 @@ module.exports = {
             create: 'Crear',
             edit: 'Editar',
             sort: 'Ordenar',
+            search: 'Buscar',
             cancel: 'Cancelar',
             undo: 'Deshacer',
             refresh: 'Refrescar',
@@ -122,6 +123,9 @@ module.exports = {
         },
         'ioncras.guia': {
             name: 'Guias'
+        },
+        'stock.quant': {
+            name: 'Remanente'
         }
     }
 };

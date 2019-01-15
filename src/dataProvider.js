@@ -11,6 +11,7 @@ import {
 import { stringify } from 'query-string';
 
 import createMessage from './util/message'
+import filterMapper from './util/filterMapper'
 
 const API_URL = 'http://localhost:8080';
 const resourceMap = {
@@ -30,14 +31,17 @@ const convertDataProviderRequestToHTTP = (type, resource, params) => {
         const { page, perPage } = params.pagination;
         const { field, order } = params.sort;
         const query = {
-            sort: JSON.stringify([field, order]),
-            range: JSON.stringify([(page - 1) * perPage, page * perPage - 1]),
-            filter: JSON.stringify(params.filter),
+            //limit: perPage,
+            //offset: page * perPage
+            //sort: JSON.stringify([field, order]),
+            //range: JSON.stringify([(page - 1) * perPage, page * perPage - 1]),
+            //filter: JSON.stringify(params.filter),
         };
+        const filters = filterMapper({...params.filter})
 
         return {
             url: `${API_URL}`,
-            options: { method: 'POST', body: JSON.stringify(createMessage(resource,'search_read',[])) },
+            options: { method: 'POST', body: JSON.stringify(createMessage(resource,'search_read',filters,query)) },
         };
     }
     case GET_ONE:

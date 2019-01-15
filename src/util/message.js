@@ -1,6 +1,6 @@
 import getMapper from './mappers'
 
-export default (model, method, params) => {
+export default (model, method, params,args = {}) => {
   
   if(method === 'create') {
     params = getMapper(model)(params);
@@ -14,6 +14,7 @@ export default (model, method, params) => {
     },
     "model": model,
     "params": params,
-    "method": method
+    "method": method,
+    "args": args
   }
 }

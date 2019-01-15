@@ -9,17 +9,11 @@ const StockFilter = (props) => (
     <ReferenceInput label="Producto" source="product_id" reference="product.product" allowEmpty>
       <SelectInput source="display_name" />
     </ReferenceInput>
-    <ReferenceInput label="Locacion" source="location_id" reference="stock.location" allowEmpty>
-      <SelectInput source="display_name" />
-    </ReferenceInput>
-    <ReferenceInput label="Proveedor" source="owner_id" reference="res.partner" allowEmpty>
-      <SelectInput source="display_name" />
-    </ReferenceInput>
   </Filter>
 );
 
 export const StockList = props => (
-  <List {...props} filters={<StockFilter />}>
+  <List {...props} filters={<StockFilter />} filter={{ location_id: 12 }}>
     <Responsive
       small={
         <SimpleList
@@ -30,9 +24,9 @@ export const StockList = props => (
       medium={
         <Datagrid>
           <TextField source="id" />
-          <TextField source="display_name" />
-          <TextField source="quantity" />
-          <TextField source="owner_id" />
+          <TextField source="display_name" label="Producto" />
+          <TextField source="reserved_quantity" label="Reservado"/>
+          <TextField source="quantity" label="Cantidad"/>
         </Datagrid>
       }
     />
