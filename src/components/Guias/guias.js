@@ -30,22 +30,25 @@ const GuiasTitle = ({ record }) => {
 };
 
 const ItemsProductos = ({record,resource}) => {
-    const { items = [] } = record;
-
+    const  items  = record.guia_line_ids;
+    console.log(items)
     if (!items.length) {
         return <div>Sin Productos</div>;
     }
-
+    const totalBultos = items.reduce((val, item)=> val += item.product_qty,0)
     return (
         <Fragment> 
              <Fragment> 
                 {
                     items.map((item) => 
                         <div key={item.id}>
-                            {`${item.id} - ${item.nombre}`}
+                            {`${item.product_id[1]} x ${item.product_qty}`}
                         </div>
                     )
                 }
+                <div>
+                    Total bultos: {totalBultos}
+                </div>
             </Fragment>
         </Fragment>
     );
@@ -89,11 +92,13 @@ const MyDatagridRow = ({ record, resource, id, onToggleItem, children, selected,
 const MyDatagridBody = props => <DatagridBody {...props} row={<MyDatagridRow />} />;
 const MyDatagrid = props => <Datagrid {...props} body={<MyDatagridBody />} />;
 
+const guiaDefaultValue = { location_id: 8, picking_type_id: 4, date: new Date()};
+const guiaLineDefaultValue = { product_uom_id: 1, vacio_price: 15, product_qty: 1}
 export class GuiasCreate extends Component {
     render() {
         return (            
             <Create {...this.props}>
-                <SimpleForm>
+                <SimpleForm defaultValue={guiaDefaultValue}>
                     <TextInput source="numero" label="Numero Comprobante" />
                     <DateInput source="date" />
                     <ReferenceInput label="Proveedor" source="stock_owner_id" reference="res.partner">
@@ -103,8 +108,8 @@ export class GuiasCreate extends Component {
                         label="Proveedor"
                         source="stock_owner_id"
                         reference="res.partner" />
-                    <ArrayInput source="guia_line_ids">
-                        <SimpleFormIterator>
+                    <ArrayInput source="guia_line_ids" label="Items">
+                        <SimpleFormIterator defaultValue={guiaLineDefaultValue}>
                             <ReferenceInput label="Producto" source="product_id" reference="product.product" >
                                 <AutocompleteInput optionText="name"/>
                             </ReferenceInput>
@@ -112,14 +117,12 @@ export class GuiasCreate extends Component {
                                 label="Producto"
                                 source="id"
                                 reference="productos" />
-                            <TextInput source="precio" />
-                            
-                            <TextInput source="product_qty" />
-                            <TextInput source="vacio_price" />
+                            <TextInput source="product_qty" label="Cantidad"/>
+                            <TextInput source="vacio_price" label="Precio de Vacio"/>
+                            <TextInput style={{display: "none"}} source="product_uom_id" defaultValue="1"/>
 
                         </SimpleFormIterator>
                     </ArrayInput> 
-
                     <MyDatagrid>
                         <TextField source="numero" />
                     </MyDatagrid>

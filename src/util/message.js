@@ -1,4 +1,11 @@
+import getMapper from './mappers'
+
 export default (model, method, params) => {
+  
+  if(method === 'create') {
+    params = getMapper(model)(params);
+  }
+
   return {
     "token": {
       "database": "test",

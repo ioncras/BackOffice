@@ -73,10 +73,13 @@ const convertDataProviderRequestToHTTP = (type, resource, params) => {
             options: { method: 'PUT', body: JSON.stringify(params.data) },
         };
     case CREATE:
+            console.log(createMessage(resource, 'create', {...params.data}))
+            console.log(JSON.stringify(createMessage(resource, 'create', { ...params.data })))
         return {
             url: `${API_URL}`,
-            options: { method: 'POST', body: JSON.stringify(createMessage(resource, 'create', [params.data])) },
+            options: { method: 'POST', body: JSON.stringify(createMessage(resource, 'create', { ...params.data })) },
         };
+        break;
     case DELETE:
         return {
             url: `${API_URL}/${resource}/${params.id}`,

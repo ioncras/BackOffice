@@ -6,6 +6,7 @@ import { PostList, PostEdit, PostCreate } from './components/Post/posts';
 import { UserList } from './components/Users/users';
 import { ProductList, ProductCreate,ProductEdit} from './components/Productos/productos';
 import { ProveedorList, ProveedorCreate,ProveedorEdit} from './components/Proveedores/proveedores';
+import { StockList } from './components/Stock/stock'
 import {
   GuiasList,
   GuiasCreate
@@ -35,6 +36,7 @@ const App = () => (
       <Resource name="product.product" list={ProductList}/>
       <Resource name="res.partner" list={ProveedorList}/>
       <Resource name="ioncras.guia" list={GuiasList} icon={UserIcon} create={GuiasCreate} />
+      <Resource name="stock.quant" list={StockList} />
   </Admin>
 );
 
