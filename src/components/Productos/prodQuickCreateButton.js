@@ -46,28 +46,27 @@ class ProdQuickCreateButton extends Component {
     };
 
     handleSubmit = values => {
-        const { change, crudGetMatching, fetchStart, fetchEnd, showNotification } = this.props;
-
+        const { change, crudGetMatching, fetchStart, fetchEnd, showNotification, source } = this.props;
+        console.log(this.props)
         // Dispatch an action letting react-admin know a API call is ongoing
-        fetchStart();
+        //fetchStart();
 
         // As we want to know when the new post has been created in order to close the modal, we use the
         // dataProvider directly
         dataProvider(CREATE, 'product.product', { data: values })
             .then(({ data }) => {
-                // Refresh the choices of the ReferenceInput to ensure our newly created post
-                // always appear, even after selecting another post
-                /*debugger;
+                
                 crudGetMatching(
-                    'productos',
-                    'guias@id',
+                    'product.product',
+                    'ioncras.guia@' + source,
                     { page: 1, perPage: 25 },
-                    { field: 'id_prod', order: 'DESC' },
+                    { field: 'id', order: 'DESC' },
                     {}
                 );
 
                 // Update the main react-admin form (in this case, the comments creation form)
-                change(REDUX_FORM_NAME, 'id', data.id); //id producto de tabla guias*/
+                console.log('data', data)
+                change(REDUX_FORM_NAME, source, data.id);
                 this.setState({ showDialog: false });
             })
             .catch(error => {

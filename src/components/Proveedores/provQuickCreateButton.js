@@ -57,16 +57,17 @@ class ProvQuickCreateButton extends Component {
             .then(({ data }) => {
                 // Refresh the choices of the ReferenceInput to ensure our newly created post
                 // always appear, even after selecting another post
-               /*- crudGetMatching(
-                    'proveedores',
-                    'guias@proveedor_id',
+               crudGetMatching(
+                    'res.partner',
+                    'ioncras.guia@stock_owner_id',
                     { page: 1, perPage: 25 },
-                    { field: 'id_prov', order: 'DESC' },
+                    { field: 'id', order: 'DESC' },
                     {}
-               );*/
+               );
 
                 // Update the main react-admin form (in this case, the comments creation form)
-                //change(REDUX_FORM_NAME, 'proveedor_id', data.id);
+                console.log('data',data)
+                change(REDUX_FORM_NAME, 'stock_owner_id', data.id);
                 this.setState({ showDialog: false });
             })
             .catch(error => {
@@ -104,7 +105,7 @@ class ProvQuickCreateButton extends Component {
                             // We want no toolbar at all as we have our modal actions
                             toolbar={null}
                         >
-                            <TextInput source="name" validate={required()} />
+                            <TextInput source="name" label="Nombre" validate={required()} />
                         </SimpleForm>
                     </DialogContent>
                     <DialogActions>

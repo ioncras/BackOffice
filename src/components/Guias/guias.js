@@ -17,7 +17,17 @@ import {
     SimpleList,
     FunctionField, Filter
 } from 'react-admin';
-
+import {
+    GET_LIST,
+    GET_ONE,
+    GET_MANY,
+    GET_MANY_REFERENCE,
+    CREATE,
+    UPDATE,
+    DELETE,
+    fetchUtils,
+} from 'react-admin';
+import dataProvider from '../../dataProvider'
 import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
 import Checkbox from '@material-ui/core/Checkbox';
@@ -40,20 +50,32 @@ const GuiasFilter = (props) => (
     </Filter>
 );
 
-const ItemsProductos = ({record,resource}) => {
-    const  items  = record.guia_line_ids;
-    console.log(items)
-    if (!items.length) {
-        return <div>Sin Productos</div>;
+
+class GuiaLines extends Component {
+    constructor() {
+        super()
+        this.state = { guiaLines: [] }
     }
-    const totalBultos = items.reduce((val, item)=> val += item.product_qty,0)
-    return (
-        <Fragment> 
-             <Fragment> 
 
+    componentDidMount() {
+        dataProvider(GET_MANY, 'ioncras.guia.line', { ids: this.props.ids }).then(res => res.data)
+                                                                            .then(result => this.setState({guiaLines: result}))
+    }
 
+    render() {
+        const { guiaLines } = this.state
+        return guiaLines.length ? this.renderGuiaLines() : (
+            <span>Cargando...</span>
+        )
+    }
+
+    renderGuiaLines() {
+        const items = this.state.guiaLines
+        const totalBultos = items.reduce((val, item) => val += item.product_qty, 0)
+        return (<Fragment>
+            <Fragment>
                 {
-                    items.map((item) => 
+                    items.map((item) =>
                         <div key={item.id}>
                             {`${item.product_id[1]} x ${item.product_qty}`}
                         </div>
@@ -63,7 +85,17 @@ const ItemsProductos = ({record,resource}) => {
                     Total bultos: {totalBultos}
                 </div>
             </Fragment>
-        </Fragment>
+        </Fragment>)
+    }
+}
+
+const ItemsProductos = ({record,resource}) => {
+    const  items  = record.guia_line_ids;
+
+    
+    const totalBultos = items.reduce((val, item)=> val += item.product_qty,0)
+    return (
+       <GuiaLines ids={items}/>
     );
 };
 

@@ -54,7 +54,7 @@ const convertDataProviderRequestToHTTP = (type, resource, params) => {
             filter: JSON.stringify({ id: params.ids }),
         };
         console.log(params.ids)
-        const ids = []
+        const ids = params.ids
         console.log(ids)
         return {
             url: `${API_URL}`,
@@ -111,7 +111,7 @@ const convertHTTPResponseToDataProvider = (response, type, resource, params) => 
             total: json.length,
         };
     case CREATE:
-        return { data: { ...params.data, id: json.id } };
+        return { data: { ...params.data, id: json} };
     default:
         return { data: json };
     }

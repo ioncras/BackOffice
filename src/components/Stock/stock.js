@@ -15,10 +15,13 @@ const StockFilter = (props) => (
 export const StockList = props => (
   <List {...props} filters={<StockFilter />} filter={{ location_id: 12 }}>
     <Responsive
+
+
+
       small={
         <SimpleList
-          primaryText={record => record.name}
-          tertiaryText={record => new Date(record.date).toLocaleDateString()}
+          primaryText={record => record.display_name}
+          tertiaryText={record => record.quantity}
         />
       }
       medium={
