@@ -14,7 +14,8 @@ import {
     DateField,
     DateInput,
     DatagridBody,
-    SimpleList
+    SimpleList,
+    FunctionField
 } from 'react-admin';
 
 import TableCell from '@material-ui/core/TableCell';
@@ -39,6 +40,8 @@ const ItemsProductos = ({record,resource}) => {
     return (
         <Fragment> 
              <Fragment> 
+
+
                 {
                     items.map((item) => 
                         <div key={item.id}>
@@ -59,6 +62,8 @@ export const GuiasList = props => (
     <List {...props} >
         <Datagrid rowClick="edit" expand={<ItemsProductos />}>
             <TextField source="id" />   
+            <TextField source="display_name" label="Guia" />
+            <FunctionField label="Proveedor" render={record => `${record.stock_owner_id[1]} `} />
             <TextField source="nro_guia" label="Numero Guia" />
             <DateField source="date" />
         </Datagrid>
