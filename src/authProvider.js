@@ -11,7 +11,7 @@ export default (type, params) => {
         localStorage.setItem('password', password);
 
         const login = new Promise((resolve,reject) => {
-            axios.post('http://localhost:8080', {
+            axios.post('http://sistemadeventas.com.ar:8080', {
                 "id": 1,
                 "token": {
                     "database": "test",

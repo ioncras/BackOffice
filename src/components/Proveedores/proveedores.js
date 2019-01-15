@@ -7,7 +7,7 @@ const ProveedorTitle = ({ record }) => {
 
 const ProveedorFilter = (props) => (
     <Filter {...props}>
-        <TextInput label="Buscar" source="q" alwaysOn />
+        <TextInput label="Buscar" source="name" alwaysOn />
     </Filter>
 );
 

@@ -13,7 +13,7 @@ import { stringify } from 'query-string';
 import createMessage from './util/message'
 import filterMapper from './util/filterMapper'
 
-const API_URL = 'http://localhost:8080';
+const API_URL = 'http://sistemadeventas.com.ar:8080';
 const resourceMap = {
     'usuarios': 'res.users'
 }
