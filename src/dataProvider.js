@@ -47,7 +47,7 @@ const convertDataProviderRequestToHTTP = (type, resource, params) => {
     case GET_ONE:
         return {
             url: `${API_URL}`,
-            options: { method: 'POST', body: JSON.stringify(createMessage(resource, 'search_read', [['id','=',params.id]])) },
+            options: { method: 'POST', body: JSON.stringify(createMessage(resource, 'search_read', [[['id','=',params.id]]])) },
         };
     case GET_MANY: {
         const query = {
@@ -77,8 +77,6 @@ const convertDataProviderRequestToHTTP = (type, resource, params) => {
             options: { method: 'PUT', body: JSON.stringify(params.data) },
         };
     case CREATE:
-            console.log(createMessage(resource, 'create', {...params.data}))
-            console.log(JSON.stringify(createMessage(resource, 'create', { ...params.data })))
         return {
             url: `${API_URL}`,
             options: { method: 'POST', body: JSON.stringify(createMessage(resource, 'create', { ...params.data })) },
@@ -110,6 +108,10 @@ const convertHTTPResponseToDataProvider = (response, type, resource, params) => 
             data: json.map(x => x),
             total: json.length,
         };
+    case GET_ONE:
+        return {
+            data: json[0]
+        }
     case CREATE:
         return { data: { ...params.data, id: json} };
     default:

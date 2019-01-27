@@ -1,0 +1,1 @@
+export { VentaList } from './ventaList'

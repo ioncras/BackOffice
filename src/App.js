@@ -9,15 +9,17 @@ import { ProveedorList, ProveedorCreate,ProveedorEdit} from './components/Provee
 import { StockList } from './components/Stock/stock'
 import {
   GuiasList,
-  GuiasCreate
-} from './components';
+  GuiasCreate,
+  GuiaShow,
+  GuiaEdit,
+  VentaList
+} from './components/';
 
 import jsonServerProvider from 'ra-data-json-server';
 import PostIcon from '@material-ui/icons/Book';
 import UserIcon from '@material-ui/icons/Group';
 import GuidesIcon from '@material-ui/icons/Mood';
 
-import fakeDataProvider from 'ra-data-fakerest';
 import data from './data.json';
 import dataProvider from './dataProvider'
 //const dataProvider = fakeDataProvider(data);
@@ -35,8 +37,10 @@ const App = () => (
       <Resource name="res.users" list={UserList} icon={UserIcon} />
       <Resource name="product.product" list={ProductList}/>
       <Resource name="res.partner" list={ProveedorList}/>
-      <Resource name="ioncras.guia" list={GuiasList} icon={UserIcon} create={GuiasCreate} />
+      <Resource name="ioncras.guia" show={GuiaShow} list={GuiasList} create={GuiasCreate} />
       <Resource name="stock.quant" list={StockList} />
+      <Resource name="sale.order" list={VentaList} />
+      <Resource name="ioncras.guia.line" />
   </Admin>
 );
 

@@ -15,8 +15,18 @@ import {
     DateInput,
     DatagridBody,
     SimpleList,
-    FunctionField, Filter
+    FunctionField,
+    Filter,
+    Show,
+    SimpleShowLayout,
+    ReferenceArrayField,
+    SingleFieldList,
+    ChipField,
+    showNotification
+
 } from 'react-admin';
+import CardActions from '@material-ui/core/CardActions';
+import { FlatButton } from '@material-ui/core/Button';
 import {
     GET_LIST,
     GET_ONE,
@@ -27,14 +37,17 @@ import {
     DELETE,
     fetchUtils,
 } from 'react-admin';
+
+import { connect } from 'react-redux';
+import { change, submit, isSubmitting } from 'redux-form';
 import dataProvider from '../../dataProvider'
 import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
 import Checkbox from '@material-ui/core/Checkbox';
 import ProvQuickCreateButton from '../Proveedores/provQuickCreateButton';
 import ProdQuickCreateButton from '../Productos/prodQuickCreateButton';
+import ApproveButton from './actions/approveButton'
 
-//import ProvReferenceInput from './../Proveedores/provReferenceInput'
 
 const GuiasTitle = ({ record }) => {
     return <span>Guias {record ? `"${record.title}"` : ''}</span>;
@@ -59,7 +72,7 @@ class GuiaLines extends Component {
 
     componentDidMount() {
         dataProvider(GET_MANY, 'ioncras.guia.line', { ids: this.props.ids }).then(res => res.data)
-                                                                            .then(result => this.setState({guiaLines: result}))
+            .then(result => this.setState({ guiaLines: result }))
     }
 
     render() {
@@ -89,28 +102,28 @@ class GuiaLines extends Component {
     }
 }
 
-const ItemsProductos = ({record,resource}) => {
-    const  items  = record.guia_line_ids;
+const ItemsProductos = ({ record, resource }) => {
+    const items = record.guia_line_ids;
 
-    
-    const totalBultos = items.reduce((val, item)=> val += item.product_qty,0)
+
+    const totalBultos = items.reduce((val, item) => val += item.product_qty, 0)
     return (
-       <GuiaLines ids={items}/>
+        <GuiaLines ids={items} />
     );
 };
 
 
 export const GuiasList = props => (
     <List {...props} filters={<GuiasFilter />} >
-        <Datagrid rowClick="edit" expand={<ItemsProductos />}>
-            <TextField source="id" />   
+        <Datagrid rowClick="show" expand={<ItemsProductos />}>
+            <TextField source="id" />
             <TextField source="display_name" label="Guia" />
             <FunctionField label="Proveedor" render={record => `${record.stock_owner_id[1]} `} />
             <TextField source="nro_guia" label="Numero Guia" />
             <DateField source="date" />
         </Datagrid>
     </List>
-    
+
 );
 
 
@@ -139,13 +152,15 @@ const MyDatagridRow = ({ record, resource, id, onToggleItem, children, selected,
 const MyDatagridBody = props => <DatagridBody {...props} row={<MyDatagridRow />} />;
 const MyDatagrid = props => <Datagrid {...props} body={<MyDatagridBody />} />;
 
-const guiaDefaultValue = { location_id: 8, picking_type_id: 4, date: new Date()};
-const guiaLineDefaultValue = { product_uom_id: 1, vacio_price: 15, product_qty: 1}
+const guiaDefaultValue = { location_id: 8, picking_type_id: 4, date: new Date() };
+const guiaLineDefaultValue = { product_uom_id: 1, vacio_price: 15, product_qty: 1 }
+const redirect = (basePath, id, data) => `/ioncras.guia/${id}/show`;
+
 export class GuiasCreate extends Component {
     render() {
-        return (            
+        return (
             <Create {...this.props}>
-                <SimpleForm defaultValue={guiaDefaultValue}>
+                <SimpleForm defaultValue={guiaDefaultValue} redirect={redirect}>
                     <TextInput source="numero" label="Numero Comprobante" />
                     <DateInput source="date" />
                     <ReferenceInput label="Proveedor" source="stock_owner_id" reference="res.partner">
@@ -158,24 +173,60 @@ export class GuiasCreate extends Component {
                     <ArrayInput source="guia_line_ids" label="Items">
                         <SimpleFormIterator defaultValue={guiaLineDefaultValue}>
                             <ReferenceInput label="Producto" source="product_id" reference="product.product" >
-                                <AutocompleteInput optionText="name"/>
+                                <AutocompleteInput optionText="name" />
                             </ReferenceInput>
                             <ProdQuickCreateButton
                                 label="Producto"
                                 source="id"
                                 reference="productos" />
-                            <TextInput source="product_qty" label="Cantidad"/>
-                            <TextInput source="vacio_price" label="Precio de Vacio"/>
-                            <TextInput style={{display: "none"}} source="product_uom_id" defaultValue="1"/>
+                            <TextInput source="product_qty" label="Cantidad" />
+                            <TextInput source="vacio_price" label="Precio de Vacio" />
+                            <TextInput style={{ display: "none" }} source="product_uom_id" defaultValue="1" />
 
                         </SimpleFormIterator>
-                    </ArrayInput> 
+                    </ArrayInput>
                     <MyDatagrid>
                         <TextField source="numero" />
                     </MyDatagrid>
-                            
-                </SimpleForm>                
+
+                </SimpleForm>
             </Create>
         );
     }
 }
+const cardActionStyle = {
+    zIndex: 2,
+    display: 'inline-block',
+    float: 'right',
+};
+
+const GuiaEditActions = ({ basePath, data, resource }) => {
+    if(!data) return null;
+    const { state } = data;
+
+    return (
+        <CardActions style={cardActionStyle}>
+            {state !== 'done' ? <ApproveButton record={data} /> : null}
+        </CardActions>
+    );
+}
+
+
+export const GuiaShow = (props) => (
+    <Show {...props} actions={<GuiaEditActions />}>
+        <SimpleShowLayout>
+            <TextField label="Guia" source="display_name" />
+            <FunctionField label="Estado" render={record => `${record.state === "done" ? "Validada" : "Sin validar"}`} />
+
+            <ReferenceArrayField label="Items" reference="ioncras.guia.line" source="guia_line_ids">
+                <Datagrid>
+                    <FunctionField label="Producto" render={record => `${record.product_id[1]}`} />
+                    <TextField label="Cantidad" source="product_qty" />
+                    <FunctionField label="Precio Vacio" render={record => `$${record.vacio_price}`} />
+                </Datagrid>
+            </ReferenceArrayField>
+        </SimpleShowLayout>
+    </Show>
+);
+
+export { GuiaEdit } from './edit'

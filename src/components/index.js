@@ -1,1 +1,2 @@
-export { GuiasCreate, GuiasList } from './Guias/guias';
+export { GuiasCreate, GuiasList, GuiaShow, GuiaEdit} from './Guias/guias';
+export { VentaList } from './Ventas/index';
