@@ -19,7 +19,6 @@ export const VentaList = (props) => (
       <TextField source="id" />
       <FunctionField label="Cliente" render={record => `${record.partner_id[1]}`} />
       <FunctionField label="Total" render={record => `$${record.amount_total}`} />
-
     </Datagrid>
   </List>
 );

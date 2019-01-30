@@ -126,6 +126,9 @@ module.exports = {
         },
         'stock.quant': {
             name: 'Remanente'
+        },
+        'sale.order': {
+            name: 'Ventas'
         }
     }
 };

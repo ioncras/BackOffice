@@ -13,7 +13,7 @@ import { stringify } from 'query-string';
 import createMessage from './util/message'
 import filterMapper from './util/filterMapper'
 
-const API_URL = 'http://sistemadeventas.com.ar:8080';
+const API_URL = 'http://localhost:8080';
 const resourceMap = {
     'usuarios': 'res.users'
 }
@@ -30,12 +30,14 @@ const convertDataProviderRequestToHTTP = (type, resource, params) => {
     case GET_LIST: {
         const { page, perPage } = params.pagination;
         const { field, order } = params.sort;
+        console.log()
         const query = {
-            //limit: perPage,
-            //offset: page * perPage
+            limit: perPage,
+            offset: (page - 1) * perPage,
+            order: field + " " + order 
             //sort: JSON.stringify([field, order]),
             //range: JSON.stringify([(page - 1) * perPage, page * perPage - 1]),
-            //filter: JSON.stringify(params.filter),
+     
         };
         const filters = filterMapper({...params.filter})
 
@@ -72,9 +74,10 @@ const convertDataProviderRequestToHTTP = (type, resource, params) => {
         return { url: `${API_URL}/${resource}?${stringify(query)}` };
     }
     case UPDATE:
+        console.log(params)
         return {
-            url: `${API_URL}/${resource}/${params.id}`,
-            options: { method: 'PUT', body: JSON.stringify(params.data) },
+            url: `${API_URL}`,
+            //options: { method: 'POST', body: JSON.stringify(createMessage(resource, 'update', [[parseInt(params.id),[]])) },
         };
     case CREATE:
         return {
@@ -105,12 +108,17 @@ const convertHTTPResponseToDataProvider = (response, type, resource, params) => 
     switch (type) {
     case GET_LIST:
         return {
-            data: json.map(x => x),
-            total: json.length,
+            data: json.data.map(x => x),
+            total: json.totalCount,
         };
     case GET_ONE:
         return {
-            data: json[0]
+            data: json.data[0]
+        }
+    case GET_MANY: 
+        return {
+            data: json.data.map(x => x),
+            total: json.totalCount
         }
     case CREATE:
         return { data: { ...params.data, id: json} };

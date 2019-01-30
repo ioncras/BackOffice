@@ -26,7 +26,7 @@ import {
 
 } from 'react-admin';
 import CardActions from '@material-ui/core/CardActions';
-import { FlatButton } from '@material-ui/core/Button';
+import Button from '@material-ui/core/Button';
 import {
     GET_LIST,
     GET_ONE,
@@ -37,7 +37,7 @@ import {
     DELETE,
     fetchUtils,
 } from 'react-admin';
-
+import { push } from 'react-router-redux';
 import { connect } from 'react-redux';
 import { change, submit, isSubmitting } from 'redux-form';
 import dataProvider from '../../dataProvider'
@@ -46,7 +46,7 @@ import TableRow from '@material-ui/core/TableRow';
 import Checkbox from '@material-ui/core/Checkbox';
 import ProvQuickCreateButton from '../Proveedores/provQuickCreateButton';
 import ProdQuickCreateButton from '../Productos/prodQuickCreateButton';
-import ApproveButton from './actions/approveButton'
+
 
 
 const GuiasTitle = ({ record }) => {
@@ -114,8 +114,8 @@ const ItemsProductos = ({ record, resource }) => {
 
 
 export const GuiasList = props => (
-    <List {...props} filters={<GuiasFilter />} >
-        <Datagrid rowClick="show" expand={<ItemsProductos />}>
+    <List {...props} filters={<GuiasFilter />} sort={{ field: 'create_date', order: 'DESC' }}>
+        <Datagrid rowClick="edit" expand={<ItemsProductos />}>
             <TextField source="id" />
             <TextField source="display_name" label="Guia" />
             <FunctionField label="Proveedor" render={record => `${record.stock_owner_id[1]} `} />
@@ -160,7 +160,7 @@ export class GuiasCreate extends Component {
     render() {
         return (
             <Create {...this.props}>
-                <SimpleForm defaultValue={guiaDefaultValue} redirect={redirect}>
+                <SimpleForm defaultValue={guiaDefaultValue}>
                     <TextInput source="numero" label="Numero Comprobante" />
                     <DateInput source="date" />
                     <ReferenceInput label="Proveedor" source="stock_owner_id" reference="res.partner">
@@ -194,26 +194,15 @@ export class GuiasCreate extends Component {
         );
     }
 }
-const cardActionStyle = {
-    zIndex: 2,
-    display: 'inline-block',
-    float: 'right',
-};
 
-const GuiaEditActions = ({ basePath, data, resource }) => {
-    if(!data) return null;
-    const { state } = data;
-
-    return (
-        <CardActions style={cardActionStyle}>
-            {state !== 'done' ? <ApproveButton record={data} /> : null}
-        </CardActions>
-    );
+const editBtnOnClick = (e) => {
+    console.log(push)
+    push("/ioncras.guia/" + e.currentTarget.getAttribute('data-id'));
 }
 
 
 export const GuiaShow = (props) => (
-    <Show {...props} actions={<GuiaEditActions />}>
+    <Show {...props}>
         <SimpleShowLayout>
             <TextField label="Guia" source="display_name" />
             <FunctionField label="Estado" render={record => `${record.state === "done" ? "Validada" : "Sin validar"}`} />
@@ -228,5 +217,5 @@ export const GuiaShow = (props) => (
         </SimpleShowLayout>
     </Show>
 );
-
+ 
 export { GuiaEdit } from './edit'

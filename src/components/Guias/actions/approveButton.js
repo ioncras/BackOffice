@@ -12,8 +12,8 @@ class ApproveButton extends Component {
   handleClick = () => {
     const { id } = this.props.record
     const message = createMessage("ioncras.guia","button_validate",[id]);
-    axios.post('http://sistemadeventas.com.ar:8080',message).then(response => {
-      window.location.reload()
+    axios.post('http://localhost:8080',message).then(response => {
+      //window.location.reload()
     })
   }
 

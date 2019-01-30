@@ -12,7 +12,8 @@ import {
   GuiasCreate,
   GuiaShow,
   GuiaEdit,
-  VentaList
+  VentaList,
+  StockShow
 } from './components/';
 
 import jsonServerProvider from 'ra-data-json-server';
@@ -37,8 +38,8 @@ const App = () => (
       <Resource name="res.users" list={UserList} icon={UserIcon} />
       <Resource name="product.product" list={ProductList}/>
       <Resource name="res.partner" list={ProveedorList}/>
-      <Resource name="ioncras.guia" show={GuiaShow} list={GuiasList} create={GuiasCreate} />
-      <Resource name="stock.quant" list={StockList} />
+      <Resource name="ioncras.guia" edit={GuiaEdit} list={GuiasList} create={GuiasCreate} />
+      <Resource name="stock.quant" show={StockShow} list={StockList} />
       <Resource name="sale.order" list={VentaList} />
       <Resource name="ioncras.guia.line" />
   </Admin>
