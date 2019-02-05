@@ -30,3 +30,7 @@
     transform: rotate(360deg);
   }
 }
+
+.ra-input-guia_line_ids {
+  display: none;
+}

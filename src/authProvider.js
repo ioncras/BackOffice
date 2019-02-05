@@ -1,12 +1,35 @@
 import { AUTH_LOGIN, AUTH_LOGOUT, AUTH_ERROR, AUTH_CHECK } from 'react-admin';
+import axios from 'axios';
+
 
 export default (type, params) => {
     // called when the user attempts to log in
     if (type === AUTH_LOGIN) {
-        const { username } = params;
+        const { username, password } = params;
+
         localStorage.setItem('username', username);
-        // accept all username/password combinations
-        return Promise.resolve();
+        localStorage.setItem('password', password);
+
+        const login = new Promise((resolve,reject) => {
+            axios.post('http://sistemadeventas.com.ar:8080', {
+                "id": 1,
+                "token": {
+                    "database": "test",
+                    "username": username,
+                    "password": password
+                },
+                "model": "res.users",
+                "params": [
+                    "test",
+                    username,
+                    password,
+                    []
+                ],
+                "method": "authenticate"
+            }).then(response => response.data == true ? resolve(): reject());
+        })
+       
+        return login;
     }
     // called when the user clicks on the logout button
     if (type === AUTH_LOGOUT) {

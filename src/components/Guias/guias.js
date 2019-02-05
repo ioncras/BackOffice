@@ -14,46 +14,116 @@ import {
     DateField,
     DateInput,
     DatagridBody,
-    SimpleList
-} from 'react-admin';
+    SimpleList,
+    FunctionField,
+    Filter,
+    Show,
+    SimpleShowLayout,
+    ReferenceArrayField,
+    SingleFieldList,
+    ChipField,
+    showNotification
 
+} from 'react-admin';
+import CardActions from '@material-ui/core/CardActions';
+import Button from '@material-ui/core/Button';
+import {
+    GET_LIST,
+    GET_ONE,
+    GET_MANY,
+    GET_MANY_REFERENCE,
+    CREATE,
+    UPDATE,
+    DELETE,
+    fetchUtils,
+} from 'react-admin';
+import { push } from 'react-router-redux';
+import { connect } from 'react-redux';
+import { change, submit, isSubmitting } from 'redux-form';
+import dataProvider from '../../dataProvider'
 import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
 import Checkbox from '@material-ui/core/Checkbox';
+import ProvQuickCreateButton from '../Proveedores/provQuickCreateButton';
+import ProdQuickCreateButton from '../Productos/prodQuickCreateButton';
+
 
 
 const GuiasTitle = ({ record }) => {
     return <span>Guias {record ? `"${record.title}"` : ''}</span>;
 };
 
-const ItemsProductos = ({record,resource}) => {
-    const { items = [] } = record;
+const GuiasFilter = (props) => (
+    <Filter {...props}>
+        <ReferenceInput label="Proveedor" source="stock_owner_id" reference="res.partner" allowEmpty>
+            <SelectInput source="display_name" />
+        </ReferenceInput>
+        <TextInput label="Id" source="id" />
+        <DateInput label="Fecha" source="date" />
+    </Filter>
+);
 
-    if (!items.length) {
-        return <div>Sin Productos</div>;
+
+class GuiaLines extends Component {
+    constructor() {
+        super()
+        this.state = { guiaLines: [] }
     }
 
-    return (
-        <Fragment>           
+    componentDidMount() {
+        dataProvider(GET_MANY, 'ioncras.guia.line', { ids: this.props.ids }).then(res => res.data)
+            .then(result => this.setState({ guiaLines: result }))
+    }
 
-            {items.map((item) =>  <SimpleList key={item.id}
-                primaryText={record => record.id}
-                secondaryText={record => record.nombre}
-            />)}
-        </Fragment>
+    render() {
+        const { guiaLines } = this.state
+        return guiaLines.length ? this.renderGuiaLines() : (
+            <span>Cargando...</span>
+        )
+    }
+
+    renderGuiaLines() {
+        const items = this.state.guiaLines
+        const totalBultos = items.reduce((val, item) => val += item.product_qty, 0)
+        return (<Fragment>
+            <Fragment>
+                {
+                    items.map((item) =>
+                        <div key={item.id}>
+                            {`${item.product_id[1]} x ${item.product_qty}`}
+                        </div>
+                    )
+                }
+                <div>
+                    Total bultos: {totalBultos}
+                </div>
+            </Fragment>
+        </Fragment>)
+    }
+}
+
+const ItemsProductos = ({ record, resource }) => {
+    const items = record.guia_line_ids;
+
+
+    const totalBultos = items.reduce((val, item) => val += item.product_qty, 0)
+    return (
+        <GuiaLines ids={items} />
     );
 };
 
 
 export const GuiasList = props => (
-    <List {...props} >
+    <List {...props} filters={<GuiasFilter />} sort={{ field: 'create_date', order: 'DESC' }}>
         <Datagrid rowClick="edit" expand={<ItemsProductos />}>
-            <TextField source="id" />   
-            <TextField source="numero" label="Numero Comprobante" />
-            <DateField source="fecha" />
+            <TextField source="id" />
+            <TextField source="display_name" label="Guia" />
+            <FunctionField label="Proveedor" render={record => `${record.stock_owner_id[1]} `} />
+            <TextField source="nro_guia" label="Numero Guia" />
+            <DateField source="date" />
         </Datagrid>
     </List>
-    
+
 );
 
 
@@ -82,30 +152,70 @@ const MyDatagridRow = ({ record, resource, id, onToggleItem, children, selected,
 const MyDatagridBody = props => <DatagridBody {...props} row={<MyDatagridRow />} />;
 const MyDatagrid = props => <Datagrid {...props} body={<MyDatagridBody />} />;
 
+const guiaDefaultValue = { location_id: 8, picking_type_id: 4, date: new Date() };
+const guiaLineDefaultValue = { product_uom_id: 1, vacio_price: 15, product_qty: 1 }
+const redirect = (basePath, id, data) => `/ioncras.guia/${id}/show`;
+
 export class GuiasCreate extends Component {
     render() {
-        return (            
+        return (
             <Create {...this.props}>
-                <SimpleForm>
+                <SimpleForm defaultValue={guiaDefaultValue}>
                     <TextInput source="numero" label="Numero Comprobante" />
-                    <DateInput source="fecha" />
-                    <ReferenceInput label="Proveedor" source="proveedor_id" reference="proveedores">
-                        <SelectInput optionText="nombre" />
+                    <DateInput source="date" />
+                    <ReferenceInput label="Proveedor" source="stock_owner_id" reference="res.partner">
+                        <SelectInput optionText="name" />
                     </ReferenceInput>
-                    <ArrayInput source="items">
-                        <SimpleFormIterator>
-                            <ReferenceInput label="Producto" reference="productos" >
-                                <AutocompleteInput optionText="nombre"/>
+                    <ProvQuickCreateButton
+                        label="Proveedor"
+                        source="stock_owner_id"
+                        reference="res.partner" />
+                    <ArrayInput source="guia_line_ids" label="Items">
+                        <SimpleFormIterator defaultValue={guiaLineDefaultValue}>
+                            <ReferenceInput label="Producto" source="product_id" reference="product.product" >
+                                <AutocompleteInput optionText="name" />
                             </ReferenceInput>
-                            <TextInput source="precio" />
+                            <ProdQuickCreateButton
+                                label="Producto"
+                                source="id"
+                                reference="productos" />
+                            <TextInput source="product_qty" label="Cantidad" />
+                            <TextInput source="vacio_price" label="Precio de Vacio" />
+                            <TextInput style={{ display: "none" }} source="product_uom_id" defaultValue="1" />
+
                         </SimpleFormIterator>
                     </ArrayInput>
                     <MyDatagrid>
                         <TextField source="numero" />
                     </MyDatagrid>
-                            
+
                 </SimpleForm>
             </Create>
         );
     }
 }
+
+const editBtnOnClick = (e) => {
+    console.log(push)
+    push("/ioncras.guia/" + e.currentTarget.getAttribute('data-id'));
+}
+
+
+export const GuiaShow = (props) => (
+    <Show {...props}>
+        <SimpleShowLayout>
+            <TextField label="Guia" source="display_name" />
+            <FunctionField label="Estado" render={record => `${record.state === "done" ? "Validada" : "Sin validar"}`} />
+
+            <ReferenceArrayField label="Items" reference="ioncras.guia.line" source="guia_line_ids">
+                <Datagrid>
+                    <FunctionField label="Producto" render={record => `${record.product_id[1]}`} />
+                    <TextField label="Cantidad" source="product_qty" />
+                    <FunctionField label="Precio Vacio" render={record => `$${record.vacio_price}`} />
+                </Datagrid>
+            </ReferenceArrayField>
+        </SimpleShowLayout>
+    </Show>
+);
+ 
+export { GuiaEdit } from './edit'

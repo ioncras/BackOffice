@@ -1,3 +1,3 @@
-export { GuiasCreate, GuiasList } from './Guias/guias';
-export { ProveedoresList } from './Proveedores/proveedores';
-export { ProductosList } from './Productos/productos';
+export { GuiasCreate, GuiasList, GuiaShow, GuiaEdit} from './Guias/guias';
+export { VentaList, VentaShow } from './Ventas/index';
+export { StockShow } from './Stock'

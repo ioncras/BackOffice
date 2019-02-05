@@ -10,7 +10,13 @@ import {
 } from 'react-admin';
 import { stringify } from 'query-string';
 
-const API_URL = 'my.api.url';
+import createMessage from './util/message'
+import filterMapper from './util/filterMapper'
+
+const API_URL = 'http://sistemadeventas.com.ar:8080';
+const resourceMap = {
+    'usuarios': 'res.users'
+}
 
 // /**
 //  * @param {String} type One of the constants appearing at the top if this file, e.g. 'UPDATE'
@@ -24,20 +30,38 @@ const convertDataProviderRequestToHTTP = (type, resource, params) => {
     case GET_LIST: {
         const { page, perPage } = params.pagination;
         const { field, order } = params.sort;
+        console.log()
         const query = {
-            sort: JSON.stringify([field, order]),
-            range: JSON.stringify([(page - 1) * perPage, page * perPage - 1]),
-            filter: JSON.stringify(params.filter),
+            limit: perPage,
+            offset: (page - 1) * perPage,
+            order: field + " " + order 
+            //sort: JSON.stringify([field, order]),
+            //range: JSON.stringify([(page - 1) * perPage, page * perPage - 1]),
+     
         };
-        return { url: `${API_URL}/${resource}?${stringify(query)}` };
+        const filters = filterMapper({...params.filter})
+
+        return {
+            url: `${API_URL}`,
+            options: { method: 'POST', body: JSON.stringify(createMessage(resource,'search_read',filters,query)) },
+        };
     }
     case GET_ONE:
-        return { url: `${API_URL}/${resource}/${params.id}` };
+        return {
+            url: `${API_URL}`,
+            options: { method: 'POST', body: JSON.stringify(createMessage(resource, 'search_read', [[['id','=',params.id]]])) },
+        };
     case GET_MANY: {
         const query = {
             filter: JSON.stringify({ id: params.ids }),
         };
-        return { url: `${API_URL}/${resource}?${stringify(query)}` };
+        console.log(params.ids)
+        const ids = params.ids
+        console.log(ids)
+        return {
+            url: `${API_URL}`,
+            options: { method: 'POST', body: JSON.stringify(createMessage(resource, 'read', [ids]  )) },
+        };
     }
     case GET_MANY_REFERENCE: {
         const { page, perPage } = params.pagination;
@@ -50,15 +74,17 @@ const convertDataProviderRequestToHTTP = (type, resource, params) => {
         return { url: `${API_URL}/${resource}?${stringify(query)}` };
     }
     case UPDATE:
+        console.log(params)
         return {
-            url: `${API_URL}/${resource}/${params.id}`,
-            options: { method: 'PUT', body: JSON.stringify(params.data) },
+            url: `${API_URL}`,
+            //options: { method: 'POST', body: JSON.stringify(createMessage(resource, 'update', [[parseInt(params.id),[]])) },
         };
     case CREATE:
         return {
-            url: `${API_URL}/${resource}`,
-            options: { method: 'POST', body: JSON.stringify(params.data) },
+            url: `${API_URL}`,
+            options: { method: 'POST', body: JSON.stringify(createMessage(resource, 'create', { ...params.data })) },
         };
+        break;
     case DELETE:
         return {
             url: `${API_URL}/${resource}/${params.id}`,
@@ -78,14 +104,24 @@ const convertDataProviderRequestToHTTP = (type, resource, params) => {
 //  */
 const convertHTTPResponseToDataProvider = (response, type, resource, params) => {
     const { headers, json } = response;
+    console.log(response)
     switch (type) {
     case GET_LIST:
         return {
-            data: json.map(x => x),
-            total: parseInt(headers.get('content-range').split('/').pop(), 10),
+            data: json.data.map(x => x),
+            total: json.totalCount,
         };
+    case GET_ONE:
+        return {
+            data: json.data[0]
+        }
+    case GET_MANY: 
+        return {
+            data: json.data.map(x => x),
+            total: json.totalCount
+        }
     case CREATE:
-        return { data: { ...params.data, id: json.id } };
+        return { data: { ...params.data, id: json} };
     default:
         return { data: json };
     }
