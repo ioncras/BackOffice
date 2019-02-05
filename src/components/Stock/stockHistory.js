@@ -27,7 +27,7 @@ export class StockHistory extends Component {
       console.log(response.data.data[0])
       let mapped = response.data.data[0].map(item => {
         item.state = item.state == "done" ? "Realizado" : item.state == "assigned" ? "Reservado" : item.state
-        item.type = item.from_loc == "Stock" ? "Salida" : "Entrada"
+        item.type = item.to_loc == "Stock" ? "Entrada" : "Salida"
         
 
          

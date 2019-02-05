@@ -8,21 +8,21 @@ import { push } from 'react-router-redux';
 import createMessage from '../../../util/message'
 import axios from 'axios';
 
-class ApproveButton extends Component {
+class CancelOrderButton extends Component {
   handleClick = () => {
     const { id } = this.props.record
-    const message = createMessage("ioncras.guia","button_validate",[id]);
-    axios.post('http://sistemadeventas.com.ar:8080',message).then(response => {
+    const message = createMessage("sale.order", "ion_cancel_order", [id]);
+    axios.post('http://sistemadeventas.com.ar:8080', message).then(response => {
       //window.location.reload()
     })
   }
 
   render() {
-    return <FlatButton label="Approve" variant="contained" color="primary" onClick={this.handleClick.bind(this)}>Validar</FlatButton>;
+    return <FlatButton label="Approve" variant="contained" color="primary" onClick={this.handleClick.bind(this)}>Cancelar</FlatButton>;
   }
 }
 
-ApproveButton.propTypes = {
+CancelOrderButton.propTypes = {
   push: PropTypes.func,
   record: PropTypes.object,
   showNotification: PropTypes.func,
@@ -31,4 +31,4 @@ ApproveButton.propTypes = {
 export default connect(null, {
   showNotification,
   push,
-})(ApproveButton);
+})(CancelOrderButton);

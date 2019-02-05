@@ -13,6 +13,7 @@ import {
   GuiaShow,
   GuiaEdit,
   VentaList,
+  VentaShow,
   StockShow
 } from './components/';
 
@@ -39,9 +40,10 @@ const App = () => (
       <Resource name="product.product" list={ProductList}/>
       <Resource name="res.partner" list={ProveedorList}/>
       <Resource name="ioncras.guia" edit={GuiaEdit} list={GuiasList} create={GuiasCreate} />
-      <Resource name="stock.quant" show={StockShow} list={StockList} />
-      <Resource name="sale.order" list={VentaList} />
       <Resource name="ioncras.guia.line" />
+      <Resource name="stock.quant" show={StockShow} list={StockList} />
+      <Resource name="sale.order" list={VentaList}  show={VentaShow} />
+      <Resource name="sale.order.line" />
   </Admin>
 );
 

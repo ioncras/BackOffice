@@ -15,7 +15,7 @@ const VentaFilter = (props) => (
 
 export const VentaList = (props) => (
   <List {...props} filters={<VentaFilter />}>
-    <Datagrid>
+    <Datagrid rowClick="show">
       <TextField source="id" />
       <FunctionField label="Cliente" render={record => `${record.partner_id[1]}`} />
       <FunctionField label="Total" render={record => `$${record.amount_total}`} />
