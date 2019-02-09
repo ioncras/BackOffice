@@ -18,9 +18,11 @@ import {
 } from './components/';
 
 import jsonServerProvider from 'ra-data-json-server';
-import PostIcon from '@material-ui/icons/Book';
+import VentasIcon from '@material-ui/icons/ShoppingBasket';
 import UserIcon from '@material-ui/icons/Group';
-import GuidesIcon from '@material-ui/icons/Mood';
+import ProveedoresIcon from '@material-ui/icons/PermIdentity';
+import StockIcon from '@material-ui/icons/GroupWork';
+import GuiasIcon from '@material-ui/icons/Assignment';
 
 import data from './data.json';
 import dataProvider from './dataProvider'
@@ -37,11 +39,11 @@ const App = () => (
   <Admin locale="es" i18nProvider={i18nProvider} dashboard={Dashboard} authProvider={authProvider} dataProvider={dataProvider}>
       <Resource name="res.users" list={UserList} icon={UserIcon} />
       <Resource name="product.product" list={ProductList}/>
-      <Resource name="res.partner" list={ProveedorList}/>
-      <Resource name="ioncras.guia" edit={GuiaEdit} list={GuiasList} create={GuiasCreate} />
+      <Resource name="res.partner" list={ProveedorList} icon={ProveedoresIcon} />
+      <Resource name="ioncras.guia" edit={GuiaEdit} list={GuiasList} create={GuiasCreate} icon={GuiasIcon}/>
       <Resource name="ioncras.guia.line" />
-      <Resource name="stock.quant" show={StockShow} list={StockList} />
-      <Resource name="sale.order" list={VentaList}  show={VentaShow} />
+      <Resource name="stock.quant" show={StockShow} list={StockList} icon={StockIcon}/>
+      <Resource name="sale.order" list={VentaList}  show={VentaShow} icon={VentasIcon} />
       <Resource name="sale.order.line" />
   </Admin>
 );
