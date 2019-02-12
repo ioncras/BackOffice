@@ -52,7 +52,7 @@ import TableRow from '@material-ui/core/TableRow';
 import Checkbox from '@material-ui/core/Checkbox';
 import ProvQuickCreateButton from '../Proveedores/provQuickCreateButton';
 import ProdQuickCreateButton from '../Productos/prodQuickCreateButton';
-
+import TableFooter from '@material-ui/core/TableFooter';
 
 
 const GuiasTitle = ({ record }) => {
@@ -97,8 +97,8 @@ class GuiaLines extends Component {
                 <TableHead>
                     <TableRow>
                         <TableCell align="right">Producto</TableCell>
-                        <TableCell align="right">Cantidad</TableCell>
                         <TableCell align="right">Precio Vacio</TableCell>
+                        <TableCell align="right">Cantidad</TableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>
@@ -107,11 +107,18 @@ class GuiaLines extends Component {
                             <TableCell component="th" scope="row">
                                 {line.product_id[1]}
                             </TableCell>
-                            <TableCell align="right">{line.product_qty}</TableCell>
                             <TableCell align="right">{line.vacio_price}</TableCell>
+                            <TableCell align="right">{line.product_qty}</TableCell>
                         </TableRow>
                     ))}
                 </TableBody>
+                <TableFooter>
+                    <TableRow>
+                        <TableCell align="right"></TableCell>
+                        <TableCell align="right">Total de bultos</TableCell>
+                        <TableCell align="right">{totalBultos}</TableCell>
+                    </TableRow>
+                </TableFooter>
                 </Table>
         )
     }
