@@ -26,6 +26,12 @@ import {
 
 } from 'react-admin';
 import CardActions from '@material-ui/core/CardActions';
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+
+import TableHead from '@material-ui/core/TableHead';
+
+
 import Button from '@material-ui/core/Button';
 import {
     GET_LIST,
@@ -71,8 +77,9 @@ class GuiaLines extends Component {
     }
 
     componentDidMount() {
-        dataProvider(GET_MANY, 'ioncras.guia.line', { ids: this.props.ids }).then(res => res.data)
-            .then(result => this.setState({ guiaLines: result }))
+       /* dataProvider(GET_MANY, 'ioncras.guia.line', { ids: this.props.ids }).then(res => res.data)
+            .then(result => this.setState({ guiaLines: result }))*/
+        this.setState({guiaLines: this.props.ids })
     }
 
     render() {
@@ -85,20 +92,28 @@ class GuiaLines extends Component {
     renderGuiaLines() {
         const items = this.state.guiaLines
         const totalBultos = items.reduce((val, item) => val += item.product_qty, 0)
-        return (<Fragment>
-            <Fragment>
-                {
-                    items.map((item) =>
-                        <div key={item.id}>
-                            {`${item.product_id[1]} x ${item.product_qty}`}
-                        </div>
-                    )
-                }
-                <div>
-                    Total bultos: {totalBultos}
-                </div>
-            </Fragment>
-        </Fragment>)
+        return (
+            <Table >
+                <TableHead>
+                    <TableRow>
+                        <TableCell align="right">Producto</TableCell>
+                        <TableCell align="right">Cantidad</TableCell>
+                        <TableCell align="right">Precio Vacio</TableCell>
+                    </TableRow>
+                </TableHead>
+                <TableBody>
+                    {this.state.guiaLines.map(line => (
+                        <TableRow key={line.id}>
+                            <TableCell component="th" scope="row">
+                                {line.product_id[1]}
+                            </TableCell>
+                            <TableCell align="right">{line.product_qty}</TableCell>
+                            <TableCell align="right">{line.vacio_price}</TableCell>
+                        </TableRow>
+                    ))}
+                </TableBody>
+                </Table>
+        )
     }
 }
 
