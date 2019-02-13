@@ -136,7 +136,7 @@ const ItemsProductos = ({ record, resource }) => {
 
 
 export const GuiasList = props => (
-    <List {...props} filters={<GuiasFilter />} sort={{ field: 'create_date', order: 'DESC' }}>
+    <List bulkActionButtons={false} {...props} filters={<GuiasFilter />} sort={{ field: 'create_date', order: 'DESC' }}>
         <Datagrid rowClick="edit" expand={<ItemsProductos />}>
             <TextField source="id" />
             <TextField source="display_name" label="Guia" />

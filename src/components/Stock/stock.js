@@ -13,7 +13,7 @@ const StockFilter = (props) => (
 );
 
 export const StockList = props => (
-  <List {...props} filters={<StockFilter />} filter={{ location_id: 12 }}>
+  <List bulkActionButtons={false} {...props} filters={<StockFilter />} filter={{ location_id: 12 }}>
     <Responsive
 
 
